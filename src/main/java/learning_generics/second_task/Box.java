@@ -28,6 +28,10 @@ public class Box<Fruit> {
     }
 
     public <Fruit> boolean compareBoxes(ArrayList<Fruit> fruitBox) {
+        if (fruitBox.isEmpty() || this.fruitBox.isEmpty()){
+            return false;
+        } else if (fruitBox.isEmpty() && this.fruitBox.isEmpty())
+            return true;
         double secondBoxWeight;
         double firstBoxWieght;
         if (this.fruitBox.get(0).getClass() == Orange.class) {
