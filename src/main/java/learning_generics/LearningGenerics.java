@@ -1,14 +1,7 @@
 package learning_generics;
-
-import java.util.Arrays;
 import java.util.Random;
 
 public class LearningGenerics {
-    public static void main(String[] args) {
-        String[] array = {" Андрей", "Привет"};
-        swapArrayElements(array);
-        System.out.println(Arrays.toString(array));
-    }
 
     public static <T extends Object> void swapArrayElements(T[] array) {
         int firstIndex;
