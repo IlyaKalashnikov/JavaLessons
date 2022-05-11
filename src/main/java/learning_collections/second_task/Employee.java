@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Employee {
     private final String surname;
-    private final Integer phoneNumber;
+    private final String phoneNumber;
 
-    public Employee(String surname, Integer phoneNumber) {
+    public Employee(String surname, String phoneNumber) {
         this.surname = surname;
         this.phoneNumber = phoneNumber;
     }
@@ -15,7 +15,7 @@ public class Employee {
         return surname;
     }
 
-    public Integer getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
