@@ -1,5 +1,4 @@
 package learning_collections.second_task;
-
 import java.util.*;
 
 public class PhoneBook {
@@ -12,25 +11,22 @@ public class PhoneBook {
      * тогда при запросе такой фамилии должны выводиться все телефоны.
      */
 
-    private Map<Employee, Integer> book;
+    private Map<Integer,Employee> book;
 
     public PhoneBook() {
         book = new HashMap<>();
     }
 
     public void add(Employee e) {
-        book.put(e, e.getPhoneNumber());
+        book.put(e.getPhoneNumber(), e);
     }
 
-    public void get(String s) {
-        for (Map.Entry<Employee, Integer> entry : book.entrySet()) {
-            if (entry.getKey().getSurname().equalsIgnoreCase(s))
-                System.out.println(entry.getKey().getSurname() + ": " + entry.getValue());
+    public void get(String s){
+        for (Map.Entry<Integer, Employee> entry : book.entrySet()) {
+            if (entry.getValue().getSurname().equalsIgnoreCase(s)){
+                System.out.println(entry.getValue());
         }
-    }
-
-    public Map<Employee, Integer> getBook() {
-        return book;
+        }
     }
 }
 
