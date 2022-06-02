@@ -7,11 +7,11 @@ import networking.model.weather_entity.WeatherEntity;
 
 public class WeatherMapper {
 
-    public static WeatherEntity toWeatherEntity (String city, String key, WeatherDto weatherDto) {
+    public WeatherEntity toWeatherEntity(String city, String key, WeatherDto weatherDto) {
         WeatherEntity weatherEntity = new WeatherEntity();
-        weatherEntity.setLocation(new Location(city,key));
+        weatherEntity.setLocation(new Location(city, key));
         weatherEntity.setForecast(new Forecast(weatherDto.getMainForecast(), weatherDto.getMinTemperatureForToday(),
                 weatherDto.getMaxTemperatureForToday(), weatherDto.getDate()));
-        return  weatherEntity;
+        return weatherEntity;
     }
 }
