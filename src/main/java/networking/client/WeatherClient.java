@@ -29,7 +29,7 @@ public class WeatherClient {
         this.propertiesLoader = propertiesLoader;
     }
 
-    public List<LocationDto> getLocations(LocationsNumber number) throws FailedToParseDataException, IOException {
+    public List<LocationDto> getLocations(LocationsNumber number) throws IOException {
         List<LocationDto> locations = null;
 
         HttpUrl httpUrl = new HttpUrl.Builder()
@@ -59,7 +59,7 @@ public class WeatherClient {
         return Collections.unmodifiableList(locations);
     }
 
-    public WeatherDto getForecast(String locationKey) throws FailedToParseDataException {
+    public WeatherDto getForecast(String locationKey) {
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
                 .host("dataservice.accuweather.com")

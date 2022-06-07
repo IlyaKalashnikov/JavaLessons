@@ -1,0 +1,46 @@
+{
+  "Headline": {
+    "EffectiveDate": "2022-06-11T07:00:00+03:00",
+    "EffectiveEpochDate": 1654920000,
+    "Severity": 4,
+    "Text": "Приятно Суббота",
+    "Category": "mild",
+    "EndDate": null,
+    "EndEpochDate": null,
+    "MobileLink": "http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021",
+    "Link": "http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021"
+  },
+  "DailyForecasts": [
+    {
+      "Date": "2022-06-07T07:00:00+03:00",
+      "EpochDate": 1654574400,
+      "Temperature": {
+        "Minimum": {
+          "Value": 51,
+          "Unit": "F",
+          "UnitType": 18
+        },
+        "Maximum": {
+          "Value": 69,
+          "Unit": "F",
+          "UnitType": 18
+        }
+      },
+      "Day": {
+        "Icon": 4,
+        "IconPhrase": "Переменная облачность",
+        "HasPrecipitation": false
+      },
+      "Night": {
+        "Icon": 34,
+        "IconPhrase": "Преимущественно ясно",
+        "HasPrecipitation": false
+      },
+      "Sources": [
+        "AccuWeather"
+      ],
+      "MobileLink": "http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021?day=1",
+      "Link": "http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021?day=1"
+    }
+  ]
+}

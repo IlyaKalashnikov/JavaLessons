@@ -23,6 +23,6 @@ public class WeatherApp {
                         propertiesLoader),
                 fileWeatherRepository,
                 weatherMapper);
-        service.getForecast(LocationsNumber.ONE_HUNDRED);
+        service.printForecast(LocationsNumber.ONE_HUNDRED);
     }
 }

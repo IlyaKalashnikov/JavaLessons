@@ -5,18 +5,19 @@ import networking.client.WeatherClient;
 import networking.enums.LocationsNumber;
 import networking.exceptions.FailedToParseDataException;
 import networking.model.accu_weather_dto.locations.LocationDto;
+import networking.model.accu_weather_dto.weather.WeatherDto;
 import networking.utils.PropertiesLoader;
 import okhttp3.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -24,20 +25,17 @@ public class WeatherClientTest {
 
     WeatherClient weatherClient;
 
-    static String getLocationsJson() {
-        ArrayList<String> locationsJson = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("src/test/resources/locations_json"))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                locationsJson.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return locationsJson.toString();
+    static String getJson(String path) throws IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream in = classLoader.getResourceAsStream(path);
+
+        String json = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))
+                .lines()
+                .collect(Collectors.joining("\n"));
+        return json;
     }
 
-    private static OkHttpClient mockHttpClient(String serializedResponse) throws IOException {
+    private static OkHttpClient mockHttpClient(String path) throws IOException {
         final OkHttpClient okHttpClient = mock(OkHttpClient.class);
 
         final Call remoteCall = mock(Call.class);
@@ -48,7 +46,7 @@ public class WeatherClientTest {
                 .code(200).message("").body(
                         ResponseBody.create(
                                 MediaType.parse("application/json"),
-                                serializedResponse
+                                getJson(path)
                         ))
                 .build();
 
@@ -59,13 +57,23 @@ public class WeatherClientTest {
     }
 
     @Test
-    void getLocations_ShouldReturnLocationList() throws IOException, FailedToParseDataException {
-        OkHttpClient mockedClient = mockHttpClient(getLocationsJson());
+    void getLocations_ShouldReturnLocationList() throws IOException {
+        OkHttpClient mockedClient = mockHttpClient("locations_json");
         PropertiesLoader propertiesLoader = new PropertiesLoader();
         WeatherClient weatherClient = new WeatherClient(mockedClient, new ObjectMapper(), propertiesLoader);
 
-        List<LocationDto> list = weatherClient.getLocations(LocationsNumber.ONE_HUNDRED);
+        List<LocationDto> list = weatherClient.getLocations(LocationsNumber.FIFTY);
 
         Assertions.assertTrue(list.size() == 50);
+    }
+
+    @Test
+    void getForecast_ShouldReturnWeatherDtoObject() throws IOException {
+        OkHttpClient mockedClient = mockHttpClient("forecast_json.json");
+        PropertiesLoader mockedLoader = Mockito.mock(PropertiesLoader.class);
+
+        WeatherClient weatherClient = new WeatherClient(mockedClient, new ObjectMapper(), mockedLoader);
+        WeatherDto forecast = weatherClient.getForecast("anyKey");
+        Assertions.assertTrue(forecast != null);
     }
 }

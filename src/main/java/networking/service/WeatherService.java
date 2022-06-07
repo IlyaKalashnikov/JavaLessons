@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class WeatherService {
     private final WeatherClient weatherClient;
@@ -31,41 +32,29 @@ public class WeatherService {
         List<LocationDto> locations = null;
         try {
             locations = weatherClient.getLocations(number);
-        } catch (FailedToParseDataException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Map<String, String> locationKeyMap = new HashMap<>();
-        for (LocationDto locationDto : locations) {
-            locationKeyMap.put(locationDto.getLocalizedName(),
-                    locationDto.getKey());
-        }
-        return locationKeyMap;
+        return locations.stream()
+                .collect(Collectors.toMap(LocationDto::getLocalizedName, LocationDto::getKey));
     }
 
-    public void getForecast(LocationsNumber number) {
+    public WeatherDto getForecast(LocationsNumber number) {
         Map<String, String> locationKeyMap = getLocations(number);
         System.out.println(locationKeyMap.keySet());
 
         System.out.println("Чтобы узнать погоду, введите название города: ");
-        WeatherDto forecast = null;
-        try {
-            String city = chooseLocation(locationKeyMap);
-            forecast = weatherClient.getForecast(locationKeyMap.get(city));
 
-            fileWeatherRepository.saveData(weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast));
+        String city = chooseLocation(locationKeyMap);
+        WeatherDto forecast = weatherClient.getForecast(locationKeyMap.get(city));
+        fileWeatherRepository.saveData(weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast));
 
-        } catch (FailedToParseDataException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        printForecast(forecast);
+        return forecast;
     }
 
 
-    private void printForecast(WeatherDto forecast) {
+    public void printForecast(LocationsNumber number) {
+        WeatherDto forecast = getForecast(number);
         System.out.println(forecast.getMainForecast());
         System.out.printf("Температура от %s до %s %n", forecast.getMinTemperatureForToday(),
                 forecast.getMaxTemperatureForToday());
@@ -74,7 +63,7 @@ public class WeatherService {
     }
 
 
-    private String chooseLocation(Map<String, String> locationKeyMap) {
+    public String chooseLocation(Map<String, String> locationKeyMap) {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String city = sc.nextLine();

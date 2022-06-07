@@ -2,8 +2,8 @@ package networking.model.weather_entity;
 
 
 public class Location {
-    private String name;
-    private String key;
+    private final String name;
+    private final String key;
 
     public Location(String name, String key) {
         this.name = name;
