@@ -11,7 +11,7 @@ public class FileWeatherRepository {
     private final File weatherRepository = new File("src/main/resources/forecast.csv");
 
     public void saveData(WeatherEntity entity) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(weatherRepository))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(weatherRepository, true))) {
             String line = entity.toString();
             writer.write(line);
             writer.newLine();

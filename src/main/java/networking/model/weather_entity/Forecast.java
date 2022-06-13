@@ -17,6 +17,22 @@ public class Forecast {
         this.date = date;
     }
 
+    public String getMainForecast() {
+        return mainForecast;
+    }
+
+    public double getMinTemperature() {
+        return minTemperature;
+    }
+
+    public double getMaxTemperature() {
+        return maxTemperature;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
     @Override
     public String toString() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");

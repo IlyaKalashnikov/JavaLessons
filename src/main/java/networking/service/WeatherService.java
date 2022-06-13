@@ -6,6 +6,7 @@ import networking.exceptions.FailedToParseDataException;
 import networking.mapper.WeatherMapper;
 import networking.model.accu_weather_dto.locations.LocationDto;
 import networking.model.accu_weather_dto.weather.WeatherDto;
+import networking.repository.DbWeatherRepository;
 import networking.repository.FileWeatherRepository;
 
 import java.io.IOException;
@@ -19,13 +20,15 @@ public class WeatherService {
     private final WeatherClient weatherClient;
     private final FileWeatherRepository fileWeatherRepository;
     private final WeatherMapper weatherMapper;
+    private final DbWeatherRepository dbWeatherRepository;
 
     public WeatherService(WeatherClient weatherClient,
                           FileWeatherRepository fileWeatherRepository,
-                          WeatherMapper weatherMapper) {
+                          WeatherMapper weatherMapper, DbWeatherRepository dbWeatherRepository) {
         this.weatherClient = weatherClient;
         this.fileWeatherRepository = fileWeatherRepository;
         this.weatherMapper = weatherMapper;
+        this.dbWeatherRepository = dbWeatherRepository;
     }
 
     public Map<String, String> getLocations(LocationsNumber number) {
@@ -48,7 +51,7 @@ public class WeatherService {
         String city = chooseLocation(locationKeyMap);
         WeatherDto forecast = weatherClient.getForecast(locationKeyMap.get(city));
         fileWeatherRepository.saveData(weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast));
-
+        dbWeatherRepository.saveForecast(weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast));
         return forecast;
     }
 

@@ -10,6 +10,14 @@ public class Location {
         this.key = key;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
     @Override
     public String toString() {
         return name + ";" + key + ";";
