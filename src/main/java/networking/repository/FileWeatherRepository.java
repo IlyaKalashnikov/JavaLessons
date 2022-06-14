@@ -19,5 +19,6 @@ public class FileWeatherRepository {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        System.out.println("Successfully uploaded forecast to file");
     }
 }

@@ -1,7 +1,8 @@
 package networking.model.accu_weather_dto.locations.administrative_area;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AdministrativeArea {
     @JsonProperty(value = "ID")
     private String id;

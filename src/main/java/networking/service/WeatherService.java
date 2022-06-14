@@ -2,15 +2,14 @@ package networking.service;
 
 import networking.client.WeatherClient;
 import networking.enums.LocationsNumber;
-import networking.exceptions.FailedToParseDataException;
 import networking.mapper.WeatherMapper;
 import networking.model.accu_weather_dto.locations.LocationDto;
 import networking.model.accu_weather_dto.weather.WeatherDto;
+import networking.model.weather_entity.WeatherEntity;
 import networking.repository.DbWeatherRepository;
 import networking.repository.FileWeatherRepository;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -42,7 +41,7 @@ public class WeatherService {
                 .collect(Collectors.toMap(LocationDto::getLocalizedName, LocationDto::getKey));
     }
 
-    public WeatherDto getForecast(LocationsNumber number) {
+    public void getForecast(LocationsNumber number) {
         Map<String, String> locationKeyMap = getLocations(number);
         System.out.println(locationKeyMap.keySet());
 
@@ -50,14 +49,27 @@ public class WeatherService {
 
         String city = chooseLocation(locationKeyMap);
         WeatherDto forecast = weatherClient.getForecast(locationKeyMap.get(city));
-        fileWeatherRepository.saveData(weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast));
-        dbWeatherRepository.saveForecast(weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast));
-        return forecast;
+        WeatherEntity weatherEntityToSave = weatherMapper.toWeatherEntity(city, locationKeyMap.get(city), forecast);
+        printForecast(forecast);
+        saveForecast(weatherEntityToSave);
     }
 
+    public void saveForecast(WeatherEntity entity) {
+        System.out.println("Введите '1', чтобы сохранить прогноз в локальный файл \nИли '2', чтобы сохранить прогноз в базу данных");
+        Scanner sc = new Scanner(System.in);
+        boolean status = false;
+        while (true) {
+            String decision = sc.nextLine();
+            if (decision.equalsIgnoreCase("1")) {
+                fileWeatherRepository.saveData(entity);
+            } else if (decision.equalsIgnoreCase("2")) {
+                dbWeatherRepository.saveForecast(entity);
+            }
+            return;
+        }
+    }
 
-    public void printForecast(LocationsNumber number) {
-        WeatherDto forecast = getForecast(number);
+    public void printForecast(WeatherDto forecast) {
         System.out.println(forecast.getMainForecast());
         System.out.printf("Температура от %s до %s %n", forecast.getMinTemperatureForToday(),
                 forecast.getMaxTemperatureForToday());

@@ -25,6 +25,6 @@ public class WeatherApp {
                 fileWeatherRepository,
                 weatherMapper,
                 dbWeatherRepository);
-        service.printForecast(LocationsNumber.ONE_HUNDRED);
+        service.getForecast(LocationsNumber.ONE_HUNDRED);
     }
 }

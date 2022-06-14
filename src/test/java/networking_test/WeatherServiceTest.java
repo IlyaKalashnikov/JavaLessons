@@ -49,7 +49,7 @@ public class WeatherServiceTest {
         Assertions.assertTrue(locationsMap.containsKey("Москва") && locationsMap.containsValue("111"));
     }
 
-    @Test
+    /*@Test
     void getForecast_ShouldReturnForecast() throws JsonProcessingException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream in = classLoader.getResourceAsStream("forecast_json.json");
@@ -68,7 +68,7 @@ public class WeatherServiceTest {
 
         Assertions.assertTrue(forecast != null);
 
-    }
+    }*/
 
 
 }
